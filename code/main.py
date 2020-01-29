@@ -2,6 +2,7 @@ from dataset import OnePoseAllJointsDataset
 import torch
 from plot import PlotPoseOnImage
 import matplotlib.pyplot as plt
+from gau_trans import gau_trans
 #set default tensor type to 32-bit float
 torch.set_default_tensor_type('torch.FloatTensor')
 
@@ -12,17 +13,26 @@ dataset = OnePoseAllJointsDataset('/home/billy/Documents/MotionTracking/data/ima
 
 
 #print(dataset[1])
-i = 6
+i = 9
 img = dataset[i]['img']
 x = dataset[i]['annot']['x']
 y = dataset[i]['annot']['y']
 id = dataset[i]['annot']['id']
 poses = [{'joints_x':x, 'joints_y':y , 'id':id}]
+scale = dataset[i]['annot']['scale']
 PlotPoseOnImage(img, poses)
+plt.title(str(scale))
 plt.show()
 
+# gau_img = gau_trans(img, x, y, id)
+# plt.imshow(gau_img.permute(1,2,0))
+# plt.show()
 
 
+torch.save(img, 'img.pt')
+torch.save(x, 'x.pt')
+torch.save(y,'y.pt')
+torch.save(id, 'id.pt')
 
 # x_ordered = [x[i] for i in id]
 # y_ordered = [y[i] for i in id]
